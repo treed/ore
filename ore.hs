@@ -1,5 +1,7 @@
+import Text.Printf
+import Data.List
+
 class Material o where
-    name :: o -> String -- Just for convenience sake
     value :: o -> Double -- in isk per unit
     value_per_m3 :: o -> Double -- in isk per m3
     size :: o -> Double -- in m3 per unit
@@ -22,24 +24,9 @@ data Ore =
     | Bistot
     | Arkonor
     | Mercoxit
+    deriving (Show)
 
 instance Material Ore where
-    name Veldspar = "Veldspar"
-    name Scordite = "Scordite"
-    name Pyroxeres = "Pyroxeres"
-    name Plagioclase = "Plagioclase"
-    name Omber = "Omber"
-    name Kernite = "Kernite"
-    name Jaspet = "Jaspet"
-    name Hemorphite = "Hemorphite"
-    name Hedbergite = "Hedbergite"
-    name Gneiss = "Gneiss"
-    name Dark_Ochre = "Dark Ochre"
-    name Crokite = "Crokite"
-    name Spodumain = "Spodumain"
-    name Bistot = "Bistot"
-    name Arkonor = "Arkonor"
-    name Mercoxit = "Mercoxit"
     value Veldspar = batch 333 $ tritanium 1000
     value Scordite = batch 333 $ tritanium 833 + pyerite 416
     value Pyroxeres = batch 333 $ tritanium 844 + pyerite 59 + mexallon 120 + nocxium 11
@@ -52,9 +39,9 @@ instance Material Ore where
     value Gneiss = batch 400 $ tritanium 171 + mexallon 171 + isogen 343 + zydrine 171
     value Dark_Ochre = batch 400 $ tritanium 250 + nocxium 500 + zydrine 250
     value Crokite = batch 250 $ tritanium 331 + nocxium 331 + zydrine 663
-    value Spodumain = batch 250 $ tritanium 700 + pyerite 140 + megacite 140
-    value Bistot = batch 200 $ pyerite 170 + zydrine 341 + megacite 170
-    value Arkonor = batch 200 $ tritanium 300 + zydrine 166 + megacite 333
+    value Spodumain = batch 250 $ tritanium 700 + pyerite 140 + megacyte 140
+    value Bistot = batch 200 $ pyerite 170 + zydrine 341 + megacyte 170
+    value Arkonor = batch 200 $ tritanium 300 + zydrine 166 + megacyte 333
     value Mercoxit = batch 250 $ morphite 530
     size Veldspar = 0.1
     size Scordite = 0.15
@@ -73,32 +60,20 @@ instance Material Ore where
     size Arkonor = 16
     size Mercoxit = 40
     value_per_m3 a = value a * (1 / size a)
-    print_out a = putStrLn $ name a ++ " " ++ (show $ value_per_m3 a)
+    print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
 
-tritanium x = x * 6.04
-pyerite x = x * 8.08
-mexallon x = x * 52.50
-nocxium x = x * 700
-isogen x = x * 80.20
-zydrine x = x * 900
-megacite x = x * 2500
-morphite x = x * 6815
+tritanium x = x * 5.8
+pyerite x = x * 7.50
+mexallon x = x * 48
+nocxium x = x * 673
+isogen x = x * 78.05
+zydrine x = x * 1000
+megacyte x = x * 2108.24
+morphite x = x * 7199.99
 
 batch size value = value / size
 
+most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
+
 main = do
-        print_out Scordite
-        print_out Pyroxeres
-        print_out Plagioclase
-        print_out Omber
-        print_out Kernite
-        print_out Jaspet
-        print_out Hemorphite
-        print_out Hedbergite
-        print_out Gneiss
-        print_out Dark_Ochre
-        print_out Crokite
-        print_out Spodumain
-        print_out Bistot
-        print_out Arkonor
-        print_out Mercoxit
+        mapM_ print_out $ sortBy most_valuable [Scordite, Pyroxeres, Plagioclase, Omber, Kernite, Jaspet, Hemorphite, Hedbergite, Gneiss, Dark_Ochre, Crokite, Spodumain, Bistot, Arkonor, Mercoxit]
