@@ -3,9 +3,7 @@ import Data.List
 
 class Material o where
     value :: o -> Double -- in isk per unit
-    value_per_m3 :: o -> Double -- in isk per m3
     size :: o -> Double -- in m3 per unit
-    print_out :: o -> IO () -- prints out name and value per m3
 
 data Ore =
       Veldspar
@@ -59,8 +57,6 @@ instance Material Ore where
     size Bistot = 16
     size Arkonor = 16
     size Mercoxit = 40
-    value_per_m3 a = value a * (1 / size a)
-    print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
 
 tritanium x = x * 5.8
 pyerite x = x * 7.50
@@ -73,6 +69,15 @@ morphite x = x * 7199.99
 
 batch size value = value / size
 
+station_efficiency = 0.5
+refining_skill = 5
+refinery_efficiency_skill = 3
+ore_refining_skill ore = 0
+
+efficiency ore = station_efficiency + 0.375 * (1 + 0.02 * refining_skill) * (1 + 0.04 * refinery_efficiency_skill) * (1 + 0.05 * ore_refining_skill ore)
+
+value_per_m3 a = value a * (1 / size a) * efficiency a
+print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
 most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
 main = do
