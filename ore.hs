@@ -24,7 +24,7 @@ data Ore =
     | Bistot
     | Arkonor
     | Mercoxit
-    deriving (Show)
+    deriving (Show, Enum, Bounded)
 
 instance Material Ore where
     value Veldspar = batch 333 $ tritanium 1000
@@ -76,4 +76,4 @@ batch size value = value / size
 most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
 main = do
-        mapM_ print_out $ sortBy most_valuable [Scordite, Pyroxeres, Plagioclase, Omber, Kernite, Jaspet, Hemorphite, Hedbergite, Gneiss, Dark_Ochre, Crokite, Spodumain, Bistot, Arkonor, Mercoxit]
+        mapM_ print_out $ sortBy most_valuable ([minBound .. maxBound] :: [Ore])
