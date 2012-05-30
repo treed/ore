@@ -24,23 +24,25 @@ data Ore =
     | Mercoxit
     deriving (Show, Enum, Bounded)
 
+batch ore size minerals amounts = (sum [mineral (amount * efficiency ore * (1 - station_tax)) | (mineral, amount) <- zip minerals amounts]) / size
+
 instance Material Ore where
-    value Veldspar = batch 333 $ tritanium 1000
-    value Scordite = batch 333 $ tritanium 833 + pyerite 416
-    value Pyroxeres = batch 333 $ tritanium 844 + pyerite 59 + mexallon 120 + nocxium 11
-    value Plagioclase = batch 333 $ tritanium 256 + pyerite 512 + mexallon 256
-    value Omber = batch 500 $ tritanium 307 + pyerite 123 + isogen 307
-    value Kernite = batch 400 $ tritanium 386 + mexallon 773 + isogen 386
-    value Jaspet = batch 500 $ tritanium 259 + pyerite 259 + mexallon 518 + nocxium 259 + zydrine 8
-    value Hemorphite = batch 500 $ tritanium 212 + isogen 212 + nocxium 424 + zydrine 28
-    value Hedbergite = batch 500 $ isogen 708 + nocxium 354 + zydrine 32
-    value Gneiss = batch 400 $ tritanium 171 + mexallon 171 + isogen 343 + zydrine 171
-    value Dark_Ochre = batch 400 $ tritanium 250 + nocxium 500 + zydrine 250
-    value Crokite = batch 250 $ tritanium 331 + nocxium 331 + zydrine 663
-    value Spodumain = batch 250 $ tritanium 700 + pyerite 140 + megacyte 140
-    value Bistot = batch 200 $ pyerite 170 + zydrine 341 + megacyte 170
-    value Arkonor = batch 200 $ tritanium 300 + zydrine 166 + megacyte 333
-    value Mercoxit = batch 250 $ morphite 530
+    value Veldspar = batch Veldspar 333 [tritanium] [1000]
+    value Scordite = batch Scordite 333 [tritanium, pyerite] [833, 416]
+    value Pyroxeres = batch Pyroxeres 333 [tritanium, pyerite, mexallon, nocxium] [844, 59, 120, 11]
+    value Plagioclase = batch Plagioclase 333 [tritanium, pyerite, mexallon] [256, 512, 256]
+    value Omber = batch Omber 500 [tritanium, pyerite, isogen] [307, 123, 307]
+    value Kernite = batch Kernite 400 [tritanium, mexallon, isogen] [386, 773, 386]
+    value Jaspet = batch Jaspet 500 [tritanium, pyerite, mexallon, nocxium, zydrine] [259, 259, 518, 259, 8]
+    value Hemorphite = batch Hemorphite 500 [tritanium, isogen, nocxium, zydrine] [212, 212, 424, 28]
+    value Hedbergite = batch Hedbergite 500 [isogen, nocxium, zydrine] [708, 354, 32]
+    value Gneiss = batch Gneiss 400 [tritanium, mexallon, isogen, zydrine] [171, 171, 343, 171]
+    value Dark_Ochre = batch Dark_Ochre 400 [tritanium, nocxium, zydrine] [250, 500, 250]
+    value Crokite = batch Crokite 250 [tritanium, nocxium, zydrine] [331, 331, 663]
+    value Spodumain = batch Spodumain 250 [tritanium, pyerite, megacyte] [700, 140, 140]
+    value Bistot = batch Bistot 200 [pyerite, zydrine, megacyte] [170, 341, 170]
+    value Arkonor = batch Arkonor 200 [tritanium, zydrine, megacyte] [300, 166, 333]
+    value Mercoxit = batch Mercoxit 250 [morphite] [530]
     size Veldspar = 0.1
     size Scordite = 0.15
     size Pyroxeres = 0.3
@@ -67,8 +69,7 @@ zydrine x = x * 1000
 megacyte x = x * 2108.24
 morphite x = x * 7199.99
 
-batch size value = value / size
-
+station_tax = 0.05
 station_efficiency = 0.5
 refining_skill = 5
 refinery_efficiency_skill = 3
@@ -76,7 +77,7 @@ ore_refining_skill ore = 0
 
 efficiency ore = station_efficiency + 0.375 * (1 + 0.02 * refining_skill) * (1 + 0.04 * refinery_efficiency_skill) * (1 + 0.05 * ore_refining_skill ore)
 
-value_per_m3 a = value a * (1 / size a) * efficiency a
+value_per_m3 a = value a * (1 / size a)
 print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
 most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
