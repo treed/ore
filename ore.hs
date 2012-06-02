@@ -87,7 +87,8 @@ most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
 prep_row a = [(show a), (printf "%.2f" $ value_per_m3 a)]
 
-print_table a = printBox $ hsep 2 left (map (\b -> (vcat left (map text b))) (transpose a))
+print_table :: [[String]] -> IO ()
+print_table rows = printBox $ hsep 2 left (map (vcat left . map text) (transpose rows))
 
 main = do
         print_table $ map prep_row $ sortBy most_valuable ([minBound .. maxBound] :: [Ore])
