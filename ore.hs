@@ -75,7 +75,8 @@ refining_skill = 5
 refinery_efficiency_skill = 3
 ore_refining_skill ore = 0
 
-efficiency ore = station_efficiency + 0.375 * (1 + 0.02 * refining_skill) * (1 + 0.04 * refinery_efficiency_skill) * (1 + 0.05 * ore_refining_skill ore)
+efficiency ore = if raw_efficiency > 1.0 then 1.0 else raw_efficiency
+                 where raw_efficiency = station_efficiency + 0.375 * (1 + 0.02 * refining_skill) * (1 + 0.04 * refinery_efficiency_skill) * (1 + 0.05 * ore_refining_skill ore)
 
 value_per_m3 a = value a * (1 / size a)
 print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
