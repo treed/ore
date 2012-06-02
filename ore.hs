@@ -73,6 +73,9 @@ station_tax = 0.05
 station_efficiency = 0.5
 refining_skill = 5
 refinery_efficiency_skill = 3
+ore_refining_skill Pyroxeres = 3
+ore_refining_skill Jaspet = 3
+ore_refining_skill Hemorphite = 3
 ore_refining_skill ore = 0
 
 efficiency ore = if raw_efficiency > 1.0 then 1.0 else raw_efficiency
