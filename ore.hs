@@ -85,9 +85,9 @@ efficiency ore = if raw_efficiency > 1.0 then 1.0 else raw_efficiency
 value_per_m3 a = value a * (1 / size a)
 most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
-prep_print a = ((show a), (printf "%.2f" $ value_per_m3 a))
-print_table2 a = printBox $ hsep 2 left [(vcat left (map text one)), (vcat left (map text two))]
-        where (one, two) = unzip a
+prep_row a = [(show a), (printf "%.2f" $ value_per_m3 a)]
+
+print_table a = printBox $ hsep 2 left (map (\b -> (vcat left (map text b))) (transpose a))
 
 main = do
-        print_table2 $ map prep_print $ sortBy most_valuable ([minBound .. maxBound] :: [Ore])
+        print_table $ map prep_row $ sortBy most_valuable ([minBound .. maxBound] :: [Ore])
