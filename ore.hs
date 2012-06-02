@@ -83,7 +83,6 @@ efficiency ore = if raw_efficiency > 1.0 then 1.0 else raw_efficiency
                  where raw_efficiency = station_efficiency + 0.375 * (1 + 0.02 * refining_skill) * (1 + 0.04 * refinery_efficiency_skill) * (1 + 0.05 * ore_refining_skill ore)
 
 value_per_m3 a = value a * (1 / size a)
-print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
 most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
 prep_print a = ((show a), (printf "%.2f" $ value_per_m3 a))
