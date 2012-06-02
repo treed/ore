@@ -1,5 +1,6 @@
 import Text.Printf
 import Data.List
+import Text.PrettyPrint.Boxes
 
 class Material o where
     value :: o -> Double -- in isk per unit
@@ -85,5 +86,9 @@ value_per_m3 a = value a * (1 / size a)
 print_out a = printf "%s %.2f\n" (show a) (value_per_m3 a)
 most_valuable a b = compare (value_per_m3 b) (value_per_m3 a)
 
+prep_print a = ((show a), (printf "%.2f" $ value_per_m3 a))
+print_table2 a = printBox $ hsep 2 left [(vcat left (map text one)), (vcat left (map text two))]
+        where (one, two) = unzip a
+
 main = do
-        mapM_ print_out $ sortBy most_valuable ([minBound .. maxBound] :: [Ore])
+        print_table2 $ map prep_print $ sortBy most_valuable ([minBound .. maxBound] :: [Ore])
