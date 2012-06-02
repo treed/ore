@@ -61,13 +61,13 @@ instance Material Ore where
     size Mercoxit = 40
 
 tritanium x = x * 5.8
-pyerite x = x * 7.50
-mexallon x = x * 48
-nocxium x = x * 673
-isogen x = x * 78.05
-zydrine x = x * 1000
-megacyte x = x * 2108.24
-morphite x = x * 7199.99
+pyerite x = x * 8
+mexallon x = x * 49.99
+nocxium x = x * 690
+isogen x = x * 75.06
+zydrine x = x * 999.99
+megacyte x = x * 2400
+morphite x = x * 6930
 
 station_tax = 0.05
 station_efficiency = 0.5
